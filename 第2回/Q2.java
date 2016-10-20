@@ -13,28 +13,23 @@ public class Main {
 		String str = br.readLine();
 
 		String[] cardList = str.split(" ");
-		List<String> sList = new ArrayList<>();
-		List<String> dList = new ArrayList<>();
-		List<String> cList = new ArrayList<>();
-		List<String> hList = new ArrayList<>();
+		List<Integer> sList = new ArrayList<>();
+		List<Integer> dList = new ArrayList<>();
+		List<Integer> cList = new ArrayList<>();
+		List<Integer> hList = new ArrayList<>();
 
-		for (int i = 0; i < cardList.length; i++) {
-			if(cardList[i].indexOf("S") == 0){
-				sList.add(cardList[i].substring(1,2));
-			}else if(cardList[i].indexOf("D") == 0){
-				dList.add((cardList[i].substring(1,2)));
-			}else if(cardList[i].indexOf("C") == 0){
-				cList.add((cardList[i].substring(1,2)));
-			}else if(cardList[i].indexOf("H") == 0){
-				hList.add((cardList[i].substring(1,2)));
+		for(String card : cardList){
+			char num = card.charAt(1);
+			if(card.charAt(0) == 'S'){
+				sList.add(Integer.valueOf(replaceStr(num)));
+			}else if(card.charAt(0) == 'D'){
+				dList.add(Integer.valueOf(replaceStr(num)));
+			}else if(card.charAt(0) == 'C'){
+				cList.add(Integer.valueOf(replaceStr(num)));
+			}else if(card.charAt(0) == 'H'){
+				hList.add(Integer.valueOf(replaceStr(num)));
 			}
 		}
-
-		// 文字列を変換
-		sList = replaceStr(sList);
-		dList = replaceStr(dList);
-		cList = replaceStr(cList);
-		hList = replaceStr(hList);
 
 		// ソート
 		Collections.sort(sList);
@@ -42,109 +37,63 @@ public class Main {
 		Collections.sort(cList);
 		Collections.sort(hList);
 
-		// 数字を変換
-		sList = replaceNum(sList);
-		dList = replaceNum(dList);
-		cList = replaceNum(cList);
-		hList = replaceNum(hList);
-
-
-		//S出力
-		if(sList.size() > 0){
-			String s = "";
-			for (int i = 0; i < sList.size(); i++) {
-				s = s + sList.get(i) + ",";
-			}
-			s = s.substring(0, s.length()-1);
-			System.out.println("S:" + s);
-		}
-
-		//D出力
-		if(dList.size() > 0){
-			String s = "";
-			for (int i = 0; i < dList.size(); i++) {
-				s = s + dList.get(i) + ",";
-			}
-			s = s.substring(0, s.length()-1);
-			System.out.println("D:" + s);
-		}
-
-		//C出力
-		if(cList.size() > 0){
-			String s = "";
-			for (int i = 0; i < cList.size(); i++) {
-				s = s + cList.get(i) + ",";
-			}
-			s = s.substring(0, s.length()-1);
-			System.out.println("C:" + s);
-		}
-
-		//H出力
-		if(hList.size() > 0){
-			String s = "";
-			for (int i = 0; i < hList.size(); i++) {
-				s = s + hList.get(i) + ",";
-			}
-			s = s.substring(0, s.length()-1);
-			System.out.println("H:" + s);
-		}
+		// 出力
+		output(sList, "S");
+		output(dList, "D");
+		output(cList, "C");
+		output(hList, "H");
 
 	}
 
-	static List<String> replaceStr(List<String> tempList) {
-		if(tempList.indexOf("0") > -1){
-			int indexNum = tempList.indexOf("0");
-			tempList.set(indexNum, "10");
+	static String replaceStr(char c) {
+		String res = String.valueOf(c);
+		if(c == '0'){
+			res = "10";
+		}else if(c == 'A'){
+			res = "1";
+		}else if(c == 'J'){
+			res = "11";
+		}else if(c == 'Q'){
+			res = "12";
+		}else if(c == 'K'){
+			res = "13";
 		}
-
-		if(tempList.indexOf("A") > -1){
-			int indexNum = tempList.indexOf("A");
-			tempList.set(indexNum, "0");
-		}
-
-		if(tempList.indexOf("J") > -1){
-			int indexNum = tempList.indexOf("J");
-			tempList.set(indexNum, "11");
-		}
-
-		if(tempList.indexOf("Q") > -1){
-			int indexNum = tempList.indexOf("Q");
-			tempList.set(indexNum, "12");
-		}
-
-		if(tempList.indexOf("K") > -1){
-			int indexNum = tempList.indexOf("K");
-			tempList.set(indexNum, "13");
-		}
-		return tempList;
+		return res;
 	}
 
-	static List<String> replaceNum(List<String> tempList) {
-
-		if(tempList.indexOf("0") > -1){
-			int indexNum = tempList.indexOf("0");
-			tempList.set(indexNum, "A");
+	static String replaceNum(Integer s) {
+		String res = "";
+		if(s == 10){
+			res = "0";
+		}else if(s == 1){
+			res = "A";
+		}else if(s == 11){
+			res = "J";
+		}else if(s == 12){
+			res = "Q";
+		}else if(s == 13){
+			res = "K";
+		}else{
+			res = String.valueOf(s);
 		}
+		return res;
+	}
 
-		if(tempList.indexOf("10") > -1){
-			int indexNum = tempList.indexOf("10");
-			tempList.set(indexNum, "0");
+	static void output(List<Integer> cardNoList, String type){
+		if(cardNoList.size() > 0){
+			StringBuilder sb1 = new StringBuilder();
+			for (int i = 0; i < cardNoList.size(); i++) {
+				sb1.append(replaceNum(cardNoList.get(i)));
+				sb1.append(",");
+			}
+			String s = sb1.toString();
+			StringBuilder sb2 = new StringBuilder();
+			sb2.append(type);
+			sb2.append(":");
+			sb2.append(s);
+			String ans = sb2.toString();
+			ans = ans.substring(0, ans.length()-1);
+			System.out.println(ans);
 		}
-
-		if(tempList.indexOf("11") > -1){
-			int indexNum = tempList.indexOf("11");
-			tempList.set(indexNum, "J");
-		}
-
-		if(tempList.indexOf("12") > -1){
-			int indexNum = tempList.indexOf("12");
-			tempList.set(indexNum, "Q");
-		}
-
-		if(tempList.indexOf("13") > -1){
-			int indexNum = tempList.indexOf("13");
-			tempList.set(indexNum, "K");
-		}
-		return tempList;
 	}
 }
